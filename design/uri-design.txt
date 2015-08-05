@@ -1,0 +1,20 @@
+HTTP Method			URI				Purpose
+
+GET				/orders				// Get all the orders in the system
+GET				/orders/{id}			// Get an order by its id
+GET				/products			// Get all the products in the system
+GET				/products/{id}			// Get a product by its id
+GET				/customers			// Get all the customers in the system
+GET				/customers/{id}			// Get a customer by its id
+
+POST				/orders				// Creates a new order
+POST				/products			// Creates a new product
+POST 				/customers			// Creates a new customer	
+
+PUT				/orders/{id}			// Updates an order
+PUT				/products/{id}			// Updates a product
+PUT				/customers/{id}			// Updates a customer
+
+DELETE				/orders/{id}			// Removes an order
+DELETE				/products/{id}			// Removes a product
+DELETE				/customers/{id}			// Removes a customer
