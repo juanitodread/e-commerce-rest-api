@@ -39,7 +39,7 @@ public class Order implements Serializable {
     private static final long serialVersionUID = -5232687450430353235L;
     
     @XmlElement
-    private long id;
+    private String id;
     @XmlElement
     private double total;
     @XmlElement
@@ -62,7 +62,7 @@ public class Order implements Serializable {
      * @param customer
      * @param items
      */
-    public Order( long id,
+    public Order( String id,
             double total,
             Date date,
             OrderStatus status,
@@ -76,7 +76,7 @@ public class Order implements Serializable {
         this.items = items;
     }
 
-    public long getId( ) {
+    public String getId( ) {
         return id;
     }
 

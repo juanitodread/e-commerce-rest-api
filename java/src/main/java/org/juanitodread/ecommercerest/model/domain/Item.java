@@ -37,7 +37,7 @@ public class Item implements Serializable {
     private static final long serialVersionUID = -5349483092067583129L;
 
     @XmlElement
-    private long id;
+    private String id;
     @XmlElement
     private int quantity;
     @XmlElement
@@ -51,13 +51,13 @@ public class Item implements Serializable {
      * @param quantity
      * @param product
      */
-    public Item( long id, int quantity, Product product ) {
+    public Item( String id, int quantity, Product product ) {
         this.id = id;
         this.quantity = quantity;
         this.product = product;
     }
 
-    public long getId( ) {
+    public String getId( ) {
         return id;
     }
 

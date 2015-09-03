@@ -37,7 +37,7 @@ public class Product implements Serializable {
     private static final long serialVersionUID = -1656888921302078194L;
 
     @XmlElement
-    private long id;
+    private String id;
     @XmlElement
     private String name;
     @XmlElement
@@ -45,19 +45,28 @@ public class Product implements Serializable {
 
     public Product( ) {
     }
+    
+    /**
+     * @param name
+     * @param price
+     */
+    public Product(String name, double price ) {
+        this.name = name;
+        this.price = price;
+    }
 
     /**
      * @param id
      * @param name
      * @param price
      */
-    public Product( long id, String name, double price ) {
+    public Product( String id, String name, double price ) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public long getId( ) {
+    public String getId( ) {
         return id;
     }
 

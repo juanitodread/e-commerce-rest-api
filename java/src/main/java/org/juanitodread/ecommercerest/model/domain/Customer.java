@@ -37,7 +37,7 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = -6556822220891168194L;
 
     @XmlElement
-    private long id;
+    private String id;
     @XmlElement
     private String firstName;
     @XmlElement
@@ -55,6 +55,31 @@ public class Customer implements Serializable {
 
     public Customer( ) {
     }
+    
+    /**
+     * @param firstName
+     * @param lastName
+     * @param street
+     * @param city
+     * @param state
+     * @param zip
+     * @param country
+     */
+    public Customer( String firstName,
+            String lastName,
+            String street,
+            String city,
+            String state,
+            String zip,
+            String country ) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.country = country;
+    }
 
     /**
      * @param id
@@ -66,7 +91,7 @@ public class Customer implements Serializable {
      * @param zip
      * @param country
      */
-    public Customer( long id,
+    public Customer( String id,
             String firstName,
             String lastName,
             String street,
@@ -84,7 +109,7 @@ public class Customer implements Serializable {
         this.country = country;
     }
 
-    public long getId( ) {
+    public String getId( ) {
         return id;
     }
 

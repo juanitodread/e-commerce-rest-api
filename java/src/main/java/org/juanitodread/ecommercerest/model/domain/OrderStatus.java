@@ -50,4 +50,20 @@ public enum OrderStatus {
     public String getName( ) {
         return name;
     }
+    
+    /**
+     * Find an OrderStatus element by its name.
+     * 
+     * @param name The name of the OrderStatus.
+     * @return The OrderStatus object if found, null otherwise.
+     */
+    public static OrderStatus findOrderStatus( String name ) {
+        for ( OrderStatus status : OrderStatus.values( ) ) {
+            if ( status.getName( ).equals( name ) ) {
+                return status;
+            }
+        }
+        return null;
+    }
+    
 }
