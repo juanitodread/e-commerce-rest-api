@@ -42,8 +42,14 @@ public class Item implements Serializable {
     private int quantity;
     @XmlElement
     private Product product;
-
-    public Item( ) {
+    
+    /**
+     * @param quantity
+     * @param product
+     */
+    public Item( int quantity, Product product ) {
+        this.quantity = quantity;
+        this.product = product;
     }
 
     /**

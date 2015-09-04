@@ -51,7 +51,23 @@ public class Order implements Serializable {
     @XmlElement
     private List<Item> items;
     
-    public Order() {
+    /**
+     * @param total
+     * @param date
+     * @param status
+     * @param customer
+     * @param items
+     */
+    public Order( double total,
+            Date date,
+            OrderStatus status,
+            Customer customer,
+            List<Item> items ) {
+        this.total = total;
+        this.date = date;
+        this.status = status;
+        this.customer = customer;
+        this.items = items;
     }
 
     /**
