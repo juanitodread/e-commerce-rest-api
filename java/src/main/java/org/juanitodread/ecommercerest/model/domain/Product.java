@@ -43,6 +43,9 @@ public class Product implements Serializable {
     @XmlElement
     private double price;
     
+    public Product() {
+    }
+    
     /**
      * @param name
      * @param price

@@ -53,6 +53,8 @@ public class Customer implements Serializable {
     @XmlElement
     private String country;
 
+    public Customer() {
+    }
     
     /**
      * @param firstName

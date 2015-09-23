@@ -51,6 +51,9 @@ public class Order implements Serializable {
     @XmlElement
     private List<Item> items;
     
+    public Order() {
+    }
+    
     /**
      * @param total
      * @param date
