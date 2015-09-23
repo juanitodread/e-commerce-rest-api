@@ -12,3 +12,6 @@ The purpose of this project is to learn about REST and that is why the project i
 
 * [3-Persistence](https://github.com/juanitodread/e-commerce-rest-api/tree/3-persistence)
   * The persistence layer with MongoDB.
+
+* [4-Service](https://github.com/juanitodread/e-commerce-rest-api/tree/4-service)
+  * The service layer which defines the resources, the services and the API interface.
