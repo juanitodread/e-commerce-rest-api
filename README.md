@@ -15,3 +15,6 @@ The purpose of this project is to learn about REST and that is why the project i
 
 * [4-Service](https://github.com/juanitodread/e-commerce-rest-api/tree/4-service)
   * The service layer which defines the resources, the services and the API interface.
+
+* [5-Hateoas](https://github.com/juanitodread/e-commerce-rest-api/tree/5-hateoas)
+  * The HATEOAS layer which add HATEOAS support to the services.
