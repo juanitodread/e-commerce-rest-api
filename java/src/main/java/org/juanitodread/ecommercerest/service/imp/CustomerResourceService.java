@@ -21,15 +21,21 @@ package org.juanitodread.ecommercerest.service.imp;
 import java.util.List;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import org.juanitodread.ecommercerest.model.dao.CustomerDao;
 import org.juanitodread.ecommercerest.model.dao.factory.DaoFactory;
 import org.juanitodread.ecommercerest.model.dao.factory.DaoType;
 import org.juanitodread.ecommercerest.model.dao.factory.imp.CustomerDaoFactory;
 import org.juanitodread.ecommercerest.model.domain.Customer;
+import org.juanitodread.ecommercerest.model.domain.Link;
 import org.juanitodread.ecommercerest.service.CustomerResource;
+import org.juanitodread.ecommercerest.util.Util;
 
 /**
  * Customer service.
@@ -49,34 +55,78 @@ public class CustomerResourceService implements CustomerResource {
     }
     
     /* (non-Javadoc)
-     * @see org.juanitodread.ecommercerest.service.CustomerResource#getAllCustomers()
+     * @see org.juanitodread.ecommercerest.service.CustomerResource#getAllCustomers(int, int, javax.ws.rs.core.UriInfo)
      */
-    public List<Customer> getAllCustomers( ) {
-        return dao.findAll( );
+    @Override
+    public Response getAllCustomers( int page,
+                                     int size,
+                                     UriInfo uriInfo ) {
+        List<Customer> customers = null;
+        ResponseBuilder responseBuilder = Response.status( Status.OK );
+        String baseUri = uriInfo.getAbsolutePath( ).toString( );
+        
+        // If page is 0 (absent) then get all customers
+        if( page == 0 ) {
+            customers = dao.findAll( );
+        } else {
+            customers = dao.filterByRange( page, size );
+            responseBuilder.header( "Link",
+                             Util.buildFilterLinks( baseUri, page, size ) );
+        }
+        
+        for( Customer c: customers ) {
+            c.setLink( Util.buildSelfLink( baseUri, c.getId( ) ) );
+        }
+        
+        GenericEntity<List<Customer>> entities = new GenericEntity<List<Customer>>( customers ) {
+        };
+        
+        return responseBuilder.entity( entities ).build( );
     }
 
     /* (non-Javadoc)
-     * @see org.juanitodread.ecommercerest.service.CustomerResource#getCustomerById(java.lang.String)
+     * @see org.juanitodread.ecommercerest.service.CustomerResource#getCustomerById(java.lang.String, javax.ws.rs.core.UriInfo)
      */
-    public Customer getCustomerById( String id ) {
-        return dao.findById( id );
+    @Override
+    public Customer getCustomerById( String id,
+                                     UriInfo uriInfo ) {
+        Customer c = dao.findById( id );
+        
+        if( c == null ) {
+            throw new WebApplicationException( Status.NOT_FOUND );
+        }
+        
+        String baseUri = uriInfo.getAbsolutePath( ).toString( );
+        c.setLink( new Link( "self", baseUri, "" ) );
+        return c;
     }
 
     /* (non-Javadoc)
-     * @see org.juanitodread.ecommercerest.service.CustomerResource#createCustomer(org.juanitodread.ecommercerest.model.domain.Customer)
+     * @see org.juanitodread.ecommercerest.service.CustomerResource#createCustomer(org.juanitodread.ecommercerest.model.domain.Customer, javax.ws.rs.core.UriInfo)
      */
-    public Response createCustomer( Customer customer ) {
+    @Override
+    public Response createCustomer( Customer customer,
+                                    UriInfo uriInfo ) {
         Customer newCustomer = dao.create( customer );
-        return Response.status( Status.CREATED).entity( newCustomer ).build( );
+        String baseUri = uriInfo.getAbsolutePath( ).toString( );
+        return Response
+                .status( Status.CREATED )
+                .header( "Link", Util.buildSelfLink( baseUri, newCustomer.getId( ) ) )
+                .build( );
     }
 
     /* (non-Javadoc)
-     * @see org.juanitodread.ecommercerest.service.CustomerResource#updateCustomer(org.juanitodread.ecommercerest.model.domain.Customer)
+     * @see org.juanitodread.ecommercerest.service.CustomerResource#updateCustomer(org.juanitodread.ecommercerest.model.domain.Customer, javax.ws.rs.core.UriInfo)
      */
-    public Response updateCustomer( Customer customer ) {
+    @Override
+    public Response updateCustomer( Customer customer,
+                                    UriInfo uriInfo ) {
         dao.update( customer );
-        String message = String.format( "Customer [%s] has been updated", customer.getId( ) );
-        return Response.status( Status.OK ).entity( message ).build( );
+        String baseUri = uriInfo.getAbsolutePath( ).toString( );
+        return Response
+                .status( Status.OK )
+                .header( "Link", new Link( "self", baseUri, "" ) ) 
+                .build( );
     }
 
     /* (non-Javadoc)

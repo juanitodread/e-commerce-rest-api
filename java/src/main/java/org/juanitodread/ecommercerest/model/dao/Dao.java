@@ -69,4 +69,13 @@ public interface Dao<T extends Serializable> {
      */
     public List<T> findAll( );
     
+    
+    /**
+     * Filter a set of entities from the store using a numeric range.
+     * 
+     * @param page Represents where will start to get entities from the store.
+     * @param size Represents the number of entities to get from the store.
+     * @return A list of entities
+     */
+    public List<T> filterByRange( int page, int size );
 }

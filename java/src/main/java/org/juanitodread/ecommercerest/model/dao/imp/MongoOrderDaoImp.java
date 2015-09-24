@@ -113,4 +113,23 @@ public class MongoOrderDaoImp implements OrderDao {
         return orders;
     }
 
+    /* (non-Javadoc)
+     * @see org.juanitodread.ecommercerest.model.dao.OrderDao#filterByRange(int, int)
+     */
+    @Override
+    public List<Order> filterByRange( int page,
+                                      int size ) {
+        List<Document> docs = ordersCollection.find( )
+                                    .skip( size * ( page - 1 ) ).limit( size )
+                                    .into( new ArrayList<Document>( ) );
+        List<Order> orders = new ArrayList<>( docs.size( ) );
+        for( Document d: docs ) {
+            orders.add( OrderAdapter.toOrder( d ) );
+        }
+        log.info( "The filter(page={}, size{}) was used and these orders were found {}",
+                  page, size, orders );
+        
+        return orders;
+    }
+
 }

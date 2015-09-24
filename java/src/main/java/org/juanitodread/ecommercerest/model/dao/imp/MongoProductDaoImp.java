@@ -114,4 +114,23 @@ public class MongoProductDaoImp implements ProductDao {
         
         return products;
     }
+
+    /* (non-Javadoc)
+     * @see org.juanitodread.ecommercerest.model.dao.ProductDao#filterByRange(int, int)
+     */
+    @Override
+    public List<Product> filterByRange( int page,
+                                        int size ) {
+        List<Document> docs = productsCollection.find( )
+                                    .skip( size * ( page - 1 ) ).limit( size )
+                                    .into( new ArrayList<Document>( ) );
+        List<Product> products = new ArrayList<>( docs.size( ) );
+        for( Document d: docs ) {
+            products.add( ProductAdapter.toProduct( d ) );
+        }
+        log.info( "The filter(page={}, size{}) was used and these products were found {}",
+                  page, size, products );
+        
+        return products;
+    }
 }

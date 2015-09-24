@@ -20,6 +20,8 @@ package org.juanitodread.ecommercerest.model.domain;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -32,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Aug 20, 2015
  */
 @XmlRootElement
+@XmlAccessorType( XmlAccessType.FIELD )
 public class Customer implements Serializable {
 
     private static final long serialVersionUID = -6556822220891168194L;
@@ -52,6 +55,8 @@ public class Customer implements Serializable {
     private String zip;
     @XmlElement
     private String country;
+    @XmlElement
+    private Link link;
 
     public Customer() {
     }
@@ -66,12 +71,12 @@ public class Customer implements Serializable {
      * @param country
      */
     public Customer( String firstName,
-            String lastName,
-            String street,
-            String city,
-            String state,
-            String zip,
-            String country ) {
+                     String lastName,
+                     String street,
+                     String city,
+                     String state,
+                     String zip,
+                     String country ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.street = street;
@@ -92,13 +97,13 @@ public class Customer implements Serializable {
      * @param country
      */
     public Customer( String id,
-            String firstName,
-            String lastName,
-            String street,
-            String city,
-            String state,
-            String zip,
-            String country ) {
+                     String firstName,
+                     String lastName,
+                     String street,
+                     String city,
+                     String state,
+                     String zip,
+                     String country ) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -140,10 +145,24 @@ public class Customer implements Serializable {
     public String getCountry( ) {
         return country;
     }
+    
+    /**
+     * @return the self
+     */
+    public Link getLink( ) {
+        return this.link;
+    }
+   
+    /**
+     * @param self the self to set
+     */
+    public void setLink( Link link ) {
+        this.link = link;
+    }
 
     @Override
     public String toString( ) {
-        return String.format( "Customer [id=%s, firstName=%s, lastName=%s, street=%s, city=%s, state=%s, zip=%s, country=%s]",
+        return String.format( "Customer [id=%s, firstName=%s, lastName=%s, street=%s, city=%s, state=%s, zip=%s, country=%s, link=%s]",
                         id,
                         firstName,
                         lastName,
@@ -151,7 +170,8 @@ public class Customer implements Serializable {
                         city,
                         state,
                         zip,
-                        country );
+                        country,
+                        link );
     }
     
 }

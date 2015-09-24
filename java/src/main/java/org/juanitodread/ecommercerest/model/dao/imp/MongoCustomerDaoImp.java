@@ -112,4 +112,23 @@ public class MongoCustomerDaoImp implements CustomerDao {
 
         return customers;
     }
+
+    /* (non-Javadoc)
+     * @see org.juanitodread.ecommercerest.model.dao.CustomerDao#filterByRange(int, int)
+     */
+    @Override
+    public List<Customer> filterByRange( int page,
+                                         int size ) {
+        List<Document> docs = customersCollection.find( )
+                                    .skip( size * ( page - 1 ) ).limit( size )
+                                    .into( new ArrayList<Document>( ) );
+        List<Customer> customers = new ArrayList<>( docs.size( ) );
+        for( Document d: docs ) {
+            customers.add( CustomerAdapter.toCustomer( d ) );
+        }
+        log.info( "The filter(page={}, size{}) was used and these customers were found {}",
+                  page, size, customers );
+        
+        return customers;
+    }
 }

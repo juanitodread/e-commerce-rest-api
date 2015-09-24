@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -34,6 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Aug 22, 2015
  */
 @XmlRootElement
+@XmlAccessorType( XmlAccessType.FIELD )
 public class Order implements Serializable {
 
     private static final long serialVersionUID = -5232687450430353235L;
@@ -49,6 +52,8 @@ public class Order implements Serializable {
     @XmlElement
     private Customer customer;
     @XmlElement
+    private Link link;
+    @XmlElement
     private List<Item> items;
     
     public Order() {
@@ -62,10 +67,10 @@ public class Order implements Serializable {
      * @param items
      */
     public Order( double total,
-            Date date,
-            OrderStatus status,
-            Customer customer,
-            List<Item> items ) {
+                  Date date,
+                  OrderStatus status,
+                  Customer customer,
+                  List<Item> items ) {
         this.total = total;
         this.date = date;
         this.status = status;
@@ -82,11 +87,11 @@ public class Order implements Serializable {
      * @param items
      */
     public Order( String id,
-            double total,
-            Date date,
-            OrderStatus status,
-            Customer customer,
-            List<Item> items ) {
+                  double total,
+                  Date date,
+                  OrderStatus status,
+                  Customer customer,
+                  List<Item> items ) {
         this.id = id;
         this.total = total;
         this.date = date;
@@ -118,15 +123,38 @@ public class Order implements Serializable {
     public List<Item> getItems( ) {
         return items;
     }
+    
+    public double calculateTotal( ) {
+        total = 0;
+        for( Item item: items ) {
+            total += item.getQuantity( ) * item.getProduct( ).getPrice( );
+        }
+        return total;
+    }
+    
+    /**
+     * @return the self
+     */
+    public Link getLink( ) {
+        return this.link;
+    }
+   
+    /**
+     * @param self the self to set
+     */
+    public void setLink( Link link ) {
+        this.link = link;
+    }
 
     @Override
     public String toString( ) {
-        return String.format( "Order [id=%s, total=%s, date=%s, status=%s, customer=%s, items=%s]",
+        return String.format( "Order [id=%s, total=%s, date=%s, status=%s, customer=%s, link=%s, items=%s]",
                         id,
                         total,
                         date,
                         status,
                         customer,
+                        link,
                         items );
     }
     

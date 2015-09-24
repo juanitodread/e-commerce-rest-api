@@ -26,27 +26,28 @@ import javax.xml.bind.annotation.XmlEnum;
  * @author juanitodread
  * @version 1.0
  * 
- * Aug 22, 2015
+ *          Aug 22, 2015
  */
 @XmlEnum
 public enum OrderStatus {
-    IN_TRANSIT( 1, "In transit" ), 
-    FINISHED( 2, "Finished" ), 
+    IN_TRANSIT( 1, "In transit" ),
+    FINISHED( 2, "Finished" ),
     CANCELLED( 3, "Cancelled" );
     
-    private int id;
+    private int    id;
     
     private String name;
     
-    private OrderStatus( int id, String name ) {
+    private OrderStatus( int id,
+                         String name ) {
         this.id = id;
         this.name = name;
     }
-
+    
     public int getId( ) {
         return id;
     }
-
+    
     public String getName( ) {
         return name;
     }
@@ -58,8 +59,8 @@ public enum OrderStatus {
      * @return The OrderStatus object if found, null otherwise.
      */
     public static OrderStatus findOrderStatus( String name ) {
-        for ( OrderStatus status : OrderStatus.values( ) ) {
-            if ( status.getName( ).equals( name ) ) {
+        for( OrderStatus status: OrderStatus.values( ) ) {
+            if( status.getName( ).equals( name ) ) {
                 return status;
             }
         }

@@ -69,4 +69,12 @@ public interface ProductDao extends Dao<Product> {
      */
     public List<Product> findAll( );
 
+    /**
+     * Filter a set of products from the store using a numeric range.
+     * 
+     * @param page Represents where will start to get products from the store.
+     * @param size Represents the number of products to get from the store.
+     * @return A list of products
+     */
+    public List<Product> filterByRange( int page, int size );
 }

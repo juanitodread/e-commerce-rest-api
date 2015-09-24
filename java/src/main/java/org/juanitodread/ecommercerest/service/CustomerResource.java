@@ -18,17 +18,19 @@
  */
 package org.juanitodread.ecommercerest.service;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.juanitodread.ecommercerest.model.domain.Customer;
 
@@ -43,21 +45,30 @@ import org.juanitodread.ecommercerest.model.domain.Customer;
 public interface CustomerResource {
 
     /**
-     * Get all the customers resource.
+     * Get a range of customers resources according to the given range.
      * 
-     * @return A list of all customers in the system.
+     * @param page Is the page number from the customers will be obtained.
+     * @param size Number of customers that will be obtained.
+     * @param uriInfo URL context of the resource.
+     * 
+     * @return A Response object with the list of customers in the system 
+     *         according to the range.
      */
     @GET
     @Produces( { "application/json;charset=UTF-8", 
                  "application/xml;charset=UTF-8",
                  "application/vnd.ecommerce-v1+json;charset=UTF-8", 
                  "application/vnd.ecommerce-v1+xml;charset=UTF-8" } )
-    public List<Customer> getAllCustomers( );
+    public Response getAllCustomers( @QueryParam( "page" ) int page,
+                                           @QueryParam( "size" ) @DefaultValue( "2" ) int size,
+                                           @Context UriInfo uriInfo );
     
     /**
      * Get a customer by its id.
      * 
      * @param id Identifier of the customer.
+     * @param uriInfo URL context of the resource.
+     * 
      * @return A customer object.
      */
     @GET
@@ -66,12 +77,15 @@ public interface CustomerResource {
                  "application/xml;charset=UTF-8",
                  "application/vnd.ecommerce-v1+json;charset=UTF-8", 
                  "application/vnd.ecommerce-v1+xml;charset=UTF-8" } )
-    public Customer getCustomerById( @PathParam( "id" ) final String id );
+    public Customer getCustomerById( @PathParam( "id" ) final String id,
+                                     @Context UriInfo uriInfo );
     
     /**
      * Create a new customer in the system.
      * 
      * @param customer The customer to be created.
+     * @param uriInfo URL context of the resource.
+     * 
      * @return A response with the new id of the customer created.
      */
     @POST
@@ -81,12 +95,15 @@ public interface CustomerResource {
                  "application/xml;charset=UTF-8",
                  "application/vnd.ecommerce-v1+json;charset=UTF-8", 
                  "application/vnd.ecommerce-v1+xml;charset=UTF-8" } )
-    public Response createCustomer( final Customer customer );
+    public Response createCustomer( final Customer customer,
+                                    @Context UriInfo uriInfo );
     
     /**
      * Update a customer in the system.
      * 
      * @param customer The customer to be updated.
+     * @param uriInfo URL context of the resource.
+     * 
      * @return A response with the confirmation of the customer update.
      */
     @PUT
@@ -97,7 +114,8 @@ public interface CustomerResource {
                  "application/xml;charset=UTF-8",
                  "application/vnd.ecommerce-v1+json;charset=UTF-8", 
                  "application/vnd.ecommerce-v1+xml;charset=UTF-8" } )
-    public Response updateCustomer( final Customer customer );
+    public Response updateCustomer( final Customer customer,
+                                    @Context UriInfo uriInfo );
     
     /**
      * Remove a customer from the system.

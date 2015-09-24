@@ -18,17 +18,19 @@
  */
 package org.juanitodread.ecommercerest.service;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.juanitodread.ecommercerest.model.domain.Product;
 
@@ -41,23 +43,32 @@ import org.juanitodread.ecommercerest.model.domain.Product;
  * Aug 23, 2015
  */
 public interface ProductResource {
-
+    
     /**
-     * Get all the products resource.
+     * Get a range of products resources according to the given range.
      * 
-     * @return A list of all products in the system.
+     * @param page Is the page number from the products will be obtained.
+     * @param size Number of products that will be obtained.
+     * @param uriInfo URL context of the resource.
+     * 
+     * @return A Response object with the list of products in the system 
+     *         according to the range.
      */
     @GET
-    @Produces( { "application/json;charset=UTF-8", 
+    @Produces( { "application/json;charset=UTF-8",
                  "application/xml;charset=UTF-8",
-                 "application/vnd.ecommerce-v1+json;charset=UTF-8", 
+                 "application/vnd.ecommerce-v1+json;charset=UTF-8",
                  "application/vnd.ecommerce-v1+xml;charset=UTF-8" } )
-    public List<Product> getAllProducts( );
-    
+    public Response getAllProducts( @QueryParam( "page" ) int page,
+                                    @QueryParam( "size" ) @DefaultValue( "2" ) int size,
+                                    @Context UriInfo uriInfo );
+
     /**
      * Get a product by its id.
      * 
      * @param id Identifier of the product.
+     * @param uriInfo URL context of the resource.
+     * 
      * @return A product object.
      */
     @GET
@@ -66,12 +77,15 @@ public interface ProductResource {
                  "application/xml;charset=UTF-8",
                  "application/vnd.ecommerce-v1+json;charset=UTF-8", 
                  "application/vnd.ecommerce-v1+xml;charset=UTF-8" } )
-    public Product getProductById( @PathParam( "id" ) final String id );
+    public Product getProductById( @PathParam( "id" ) final String id,
+                                   @Context UriInfo uriInfo );
     
     /**
      * Create a new product in the system.
      * 
      * @param product The product to be created.
+     * @param uriInfo URL context of the resource.
+     * 
      * @return A response with the new id of the product created.
      */
     @POST
@@ -81,12 +95,15 @@ public interface ProductResource {
                  "application/xml;charset=UTF-8",
                  "application/vnd.ecommerce-v1+json;charset=UTF-8", 
                  "application/vnd.ecommerce-v1+xml;charset=UTF-8" } )
-    public Response createProduct( final Product product );
+    public Response createProduct( final Product product,
+                                   @Context UriInfo uriInfo );
     
     /**
      * Update a product in the system.
      * 
      * @param product The product to be updated.
+     * @param uriInfo URL context of the resource.
+     * 
      * @return A response with the confirmation of the product update.
      */
     @PUT
@@ -97,7 +114,8 @@ public interface ProductResource {
                  "application/xml;charset=UTF-8",
                  "application/vnd.ecommerce-v1+json;charset=UTF-8", 
                  "application/vnd.ecommerce-v1+xml;charset=UTF-8" } )
-    public Response updateProduct( final Product product );
+    public Response updateProduct( final Product product,
+                                   @Context UriInfo uriInfo );
     
     /**
      * Remove a product from the system.

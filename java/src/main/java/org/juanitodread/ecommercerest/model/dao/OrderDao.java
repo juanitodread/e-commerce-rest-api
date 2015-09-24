@@ -68,4 +68,13 @@ public interface OrderDao extends Dao<Order> {
      * @return A list of orders
      */
     public List<Order> findAll( );
+    
+    /**
+     * Filter a set of orders from the store using a numeric range.
+     * 
+     * @param page Represents where will start to get orders from the store.
+     * @param size Represents the number of orders to get from the store.
+     * @return A list of orders
+     */
+    public List<Order> filterByRange( int page, int size );
 }

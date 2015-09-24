@@ -69,4 +69,13 @@ public interface CustomerDao extends Dao<Customer> {
      */
     public List<Customer> findAll( );
     
+    /**
+     * Filter a set of customers from the store using a numeric range.
+     * 
+     * @param page Represents where will start to get customers from the store.
+     * @param size Represents the number of customers to get from the store.
+     * @return A list of customers
+     */
+    public List<Customer> filterByRange( int page, int size );
+    
 }

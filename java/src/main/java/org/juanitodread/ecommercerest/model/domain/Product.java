@@ -20,6 +20,8 @@ package org.juanitodread.ecommercerest.model.domain;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -32,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Aug 20, 2015
  */
 @XmlRootElement
+@XmlAccessorType( XmlAccessType.FIELD )
 public class Product implements Serializable {
 
     private static final long serialVersionUID = -1656888921302078194L;
@@ -42,6 +45,8 @@ public class Product implements Serializable {
     private String name;
     @XmlElement
     private double price;
+    @XmlElement
+    private Link link;
     
     public Product() {
     }
@@ -50,7 +55,8 @@ public class Product implements Serializable {
      * @param name
      * @param price
      */
-    public Product(String name, double price ) {
+    public Product( String name,
+                    double price ) {
         this.name = name;
         this.price = price;
     }
@@ -60,7 +66,9 @@ public class Product implements Serializable {
      * @param name
      * @param price
      */
-    public Product( String id, String name, double price ) {
+    public Product( String id,
+                    String name,
+                    double price ) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -77,12 +85,27 @@ public class Product implements Serializable {
     public double getPrice( ) {
         return price;
     }
+    
+    /**
+     * @return the self
+     */
+    public Link getLink( ) {
+        return this.link;
+    }
+   
+    /**
+     * @param self the self to set
+     */
+    public void setLink( Link link ) {
+        this.link = link;
+    }
 
     @Override
     public String toString( ) {
-        return String.format( "Product [id=%s, name=%s, price=%s]",
+        return String.format( "Product [id=%s, name=%s, price=%s, link=%s]",
                 id,
                 name,
-                price );
+                price,
+                link );
     }
 }
