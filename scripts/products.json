@@ -1,0 +1,20 @@
+{ "name" : "Hadoop: The Definitive Guide",
+  "price" : 30.31}
+{ "name" : "Advanced Analytics with Spark: Patterns for Learning from Data at Scale",
+  "price" : 29.14}
+{ "name" : "Learning Scala: Practical Functional Programming for the JVM",
+  "price" : 35.53}
+{ "name" : "Effective Python: 59 Specific Ways to Write Better Python",
+  "price" : 23.19}
+{ "name" : "Two Scoops of Django: Best Practices for Django 1.8",
+  "price" : 40.46}
+{ "name" : "Write Modern Web Apps with the MEAN Stack: Mongo, Express, AngularJS, and Node.js",
+  "price" : 28.08}
+{ "name" : "AngularJS in Action",
+  "price" : 41.37}
+{ "name" : "The Principles of Object-Oriented JavaScript",
+  "price" : 15.96}
+{ "name" : "Web Development with Node and Express: Leveraging the JavaScript Stack",
+  "price" : 18.20}
+{ "name" : "Dojo: Using the Dojo JavaScript Library to Build Ajax Applications",
+  "price" : 33.08}

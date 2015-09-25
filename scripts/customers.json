@@ -1,0 +1,29 @@
+{
+    "firstName" : "Juan Antonio",
+    "lastName" : "Sandoval Delgado",
+    "street" : "Quebec 53",
+    "city" : "Tepic",
+    "state" : "Nayarit",
+    "zip" : "63157",
+    "country" : "México"
+}
+
+{
+    "firstName" : "José",
+    "lastName" : "Arcadio Buendía",
+    "street" : "Isla sumatra 2395",
+    "city" : "Guadalajara",
+    "state" : "Jalisco",
+    "zip" : "44540",
+    "country" : "México"
+}
+
+{
+    "firstName" : "Rodolfo Alejandro",
+    "lastName" : "Montoya Franco",
+    "street" : "Republica de argentina 16",
+    "city" : "Tepic",
+    "state" : "Nayarit",
+    "zip" : "64294",
+    "country" : "México"
+}
