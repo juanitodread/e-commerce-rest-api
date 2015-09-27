@@ -1,5 +1,7 @@
 # e-commerce-rest-api
 
+[![Join the chat at https://gitter.im/juanitodread/e-commerce-rest-api](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/juanitodread/e-commerce-rest-api?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This is a simple RESTful API project in Java. The REST API represents the basic operations for an e-commerce application.
 
 The purpose of this project is to learn about REST and that is why the project is splitted in branches with different progress through the stages.
