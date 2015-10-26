@@ -16,16 +16,12 @@
  * limitations under the License.
  *
  */
-package controllers
+package models
 
-import play.api.mvc.Controller
-import play.api.mvc.Action
 import play.api.libs.json.Json
 
-import models.{Product => PBean}
-
 /**
- * RESTful service for products
+ * Product case class
  *
  * @author juanitodread
  * @version 1.0.0
@@ -33,12 +29,21 @@ import models.{Product => PBean}
  * 
  * 	        Oct 25, 2015
  */
-object Product extends Controller {
+case class Product( id: String, name: String, price: Double )
 
-  def getAllProducts = Action { implicit request =>
+/**
+ * Singleton for Product case class
+ *
+ * @author juanitodread
+ * @version 1.0.0
+ * @since   1.0.0
+ * 
+ * 	        Oct 25, 2015
+ */
+object Product {
 
-    val defaultProduct = PBean( "1", "Scala book", 23.50 )
-    Ok( Json.toJson( defaultProduct ) )
-  }
+  implicit val productWrites = Json.writes[ Product ]
+
+  implicit val productReads = Json.reads[ Product ]
 
 }
