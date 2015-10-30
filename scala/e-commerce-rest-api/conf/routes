@@ -3,7 +3,11 @@
 # ~~~~
 
 # Products
-GET                 /products                   controllers.Product.getAllProducts
+GET                 /products                   controllers.Product.getAll
+GET                 /products/:id               controllers.Product.getProductById(id: String)
+POST                /products                   controllers.Product.create
+PUT                 /products/:id               controllers.Product.update(id: String)
+DELETE              /products/:id               controllers.Product.delete(id: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET                 /assets/*file               controllers.Assets.versioned(path="/public", file)

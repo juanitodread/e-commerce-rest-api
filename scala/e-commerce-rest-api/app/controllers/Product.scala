@@ -21,8 +21,9 @@ package controllers
 import play.api.mvc.Controller
 import play.api.mvc.Action
 import play.api.libs.json.Json
-
 import models.{Product => PBean}
+import play.api.Logger
+import play.api.mvc.BodyParsers
 
 /**
  * RESTful service for products
@@ -35,10 +36,33 @@ import models.{Product => PBean}
  */
 object Product extends Controller {
 
-  def getAllProducts = Action { implicit request =>
+  val log = Logger( Product.getClass )
 
+  def getAll() = Action { implicit request =>
+    log.info( "getAllProducts()" )
     val defaultProduct = PBean( "1", "Scala book", 23.50 )
     Ok( Json.toJson( defaultProduct ) )
   }
 
+  def getProductById( id: String ) = Action { implicit request =>
+    log.info( s"getProductById($id)" )
+    val defaultProduct = PBean( id, "Scala book", 23.50 )
+    Ok( Json.toJson( defaultProduct ) )
+  }
+  
+  def create() = Action(BodyParsers.parse.json) { implicit request =>
+    log.info(s"create(): Body: ${request.body}")
+    val valid = request.body.validate[PBean]
+    log.info(s"JSON valid: $valid")
+    if(valid.isError) BadRequest(valid.toString) else Ok
+  }
+
+  def update(id: String) = Action {
+    NotImplemented
+  }
+  
+  def delete(id: String) = Action {
+    NotImplemented
+  }
+  
 }
