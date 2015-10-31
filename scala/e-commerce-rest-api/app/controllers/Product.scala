@@ -18,12 +18,22 @@
  */
 package controllers
 
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.Controller
 import play.api.mvc.Action
 import play.api.libs.json.Json
 import models.{Product => PBean}
 import play.api.Logger
 import play.api.mvc.BodyParsers
+import javax.inject.Inject
+import play.modules.reactivemongo.ReactiveMongoApi
+import play.modules.reactivemongo.MongoController
+import play.modules.reactivemongo.ReactiveMongoComponents
+import play.modules.reactivemongo.json.collection.JSONCollection
+import play.modules.reactivemongo.json.collection.JSONCollection
+import play.api.libs.json.JsObject
+import dao.MongoProductDao
+import reactivemongo.core.actors.Exceptions.PrimaryUnavailableException
 
 /**
  * RESTful service for products
@@ -31,17 +41,19 @@ import play.api.mvc.BodyParsers
  * @author juanitodread
  * @version 1.0.0
  * @since   1.0.0
- * 
+ *
  * 	        Oct 25, 2015
  */
-object Product extends Controller {
+class Product @Inject() ( val reactiveMongoApi: ReactiveMongoApi ) 
+  extends Controller with MongoController with ReactiveMongoComponents {
 
-  val log = Logger( Product.getClass )
-
-  def getAll() = Action { implicit request =>
-    log.info( "getAllProducts()" )
-    val defaultProduct = PBean( "1", "Scala book", 23.50 )
-    Ok( Json.toJson( defaultProduct ) )
+  val log = Logger( this.getClass )
+  def postDao = new MongoProductDao( reactiveMongoApi )
+  
+  def getAll() = Action.async { implicit request =>
+    log.info( "getAll()" )
+    postDao.find().map(products => Ok(Json.toJson(products.reverse)))
+    .recover {case PrimaryUnavailableException => InternalServerError("Please install MongoDB")}
   }
 
   def getProductById( id: String ) = Action { implicit request =>
@@ -51,10 +63,11 @@ object Product extends Controller {
   }
   
   def create() = Action(BodyParsers.parse.json) { implicit request =>
-    log.info(s"create(): Body: ${request.body}")
-    val valid = request.body.validate[PBean]
-    log.info(s"JSON valid: $valid")
-    if(valid.isError) BadRequest(valid.toString) else Ok
+    NotImplemented
+//    log.info(s"create(): Body: ${request.body}")
+//    val valid = request.body.validate[PBean]
+//    log.info(s"JSON valid: $valid")
+//    if(valid.isError) BadRequest(valid.toString) else Ok
   }
 
   def update(id: String) = Action {
