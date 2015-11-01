@@ -59,20 +59,14 @@ class Product @Inject() ( val reactiveMongoApi: ReactiveMongoApi )
   }
 
   def getProductById( id: String ) = Action { implicit request =>
-    log.info( s"getProductById($id)" )
-    val defaultProduct = PBean( id, "Scala book", 23.50 )
-    Ok( Json.toJson( defaultProduct ) )
+    NotImplemented
   }
-  
-  def create() = Action.async(BodyParsers.parse.json) { implicit request =>
-    log.info(s"create(): Body: ${request.body}")
-    val pr = request.body.validate[PBean]
-//    log.info(s"JSON valid: $valid")
-    log.info(s"pr.get:::::::::::::::::::::${pr.get}")
-    log.info("Starting store product")
-    postDao.save(pr.get).map( x => NoContent )
-//    if(valid.isError) BadRequest(valid.toString) else
-    .recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
+
+  def create() = Action.async( BodyParsers.parse.json ) { implicit request =>
+    log.info( s"create(): Body: ${request.body}" )
+    val pr = request.body.validate[ PBean ]
+    postDao.save( pr.get ).map( x => NoContent )
+      .recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
   }
 
   def update(id: String) = Action {
