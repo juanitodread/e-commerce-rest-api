@@ -73,8 +73,12 @@ class Product @Inject() ( val reactiveMongoApi: ReactiveMongoApi )
       .recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
   }
 
-  def update(id: String) = Action {
-    NotImplemented
+  def update( id: String ) = Action.async( BodyParsers.parse.json ) { implicit request =>
+    log.info( s"update($id): Body: ${request.body}" )
+    val pr = request.body.validate[ PBean ]
+    log.info(s"This is the updated obj: ${pr.get}")
+    postDao.update(id, pr.get ).map( x => Ok )
+      .recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
   }
   
   def delete(id: String) = Action {
