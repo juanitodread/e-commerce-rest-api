@@ -18,21 +18,26 @@
  */
 package controllers
 
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc.Controller
-import play.api.mvc.Action
-import play.api.libs.json.Json
-import models.{Product => PBean}
-import play.api.Logger
-import play.api.mvc.BodyParsers
-import javax.inject.Inject
-import play.modules.reactivemongo.ReactiveMongoApi
-import play.modules.reactivemongo.MongoController
-import play.modules.reactivemongo.ReactiveMongoComponents
-import play.modules.reactivemongo.json.collection.JSONCollection
-import play.modules.reactivemongo.json.collection.JSONCollection
-import play.api.libs.json.JsObject
 import dao.MongoProductDao
+
+import javax.inject.Inject
+
+import models.{ Product => PBean }
+
+import play.api.Logger
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.json.Json
+import play.api.mvc.{
+  Action,
+  BodyParsers,
+  Controller
+}
+import play.modules.reactivemongo.{ 
+  MongoController,
+  ReactiveMongoApi,
+  ReactiveMongoComponents
+}
+
 import reactivemongo.core.actors.Exceptions.PrimaryUnavailableException
 
 /**
@@ -52,37 +57,45 @@ class Product @Inject() ( val reactiveMongoApi: ReactiveMongoApi )
   val log = Logger( this.getClass )
   def postDao = new MongoProductDao( reactiveMongoApi )
 
-  def getAll() = Action.async { implicit request =>
+  def getAll() = Action.async {
     log.info( "getAll()" )
     postDao.find().map( products => Ok( Json.toJson( products ) ) )
-      .recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
+      .recover { case PrimaryUnavailableException => 
+                      InternalServerError( "Please install MongoDB" ) }
   }
 
-  def getProductById( id: String ) = Action.async { implicit request =>
+  def getProductById( id: String ) = Action.async { 
     log.info( s"getProductById($id)" )
     postDao.findById( id ).map( x => x match {
       case Some( x ) => Ok( Json.toJson( x ) )
       case None      => NotFound
-    } ).recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
+    } ).recover { case PrimaryUnavailableException => 
+                       InternalServerError( "Please install MongoDB" ) }
   }
 
   def create() = Action.async( BodyParsers.parse.json ) { implicit request =>
     log.info( s"create(): Body: ${request.body}" )
     val pr = request.body.validate[ PBean ]
     postDao.save( pr.get ).map( x => NoContent )
-      .recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
+      .recover { case PrimaryUnavailableException => 
+                      InternalServerError( "Please install MongoDB" ) }
   }
 
   def update( id: String ) = Action.async( BodyParsers.parse.json ) { implicit request =>
     log.info( s"update($id): Body: ${request.body}" )
     val pr = request.body.validate[ PBean ]
-    log.info(s"This is the updated obj: ${pr.get}")
-    postDao.update(id, pr.get ).map( x => Ok )
-      .recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
+    postDao.update( id, pr.get ).map( x => Ok )
+      .recover {
+        case PrimaryUnavailableException =>
+          InternalServerError( "Please install MongoDB" )
+      }
   }
   
-  def delete(id: String) = Action {
-    NotImplemented
+  def delete(id: String) = Action.async {
+    log.info( s"delete($id)" )
+    postDao.delete(id).map( x => Ok )
+      .recover { case PrimaryUnavailableException => 
+                      InternalServerError( "Please install MongoDB" ) }
   }
   
 }
