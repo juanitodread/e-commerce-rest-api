@@ -9,9 +9,11 @@ import reactivemongo.bson.BSONDocument
 import reactivemongo.api.commands.WriteResult
 
 trait ProductDao {
-  def find()( implicit ec: ExecutionContext ): Future[List[Product]]
-  
-  def save(product: Product)(implicit ec: ExecutionContext): Future[WriteResult]
+  def find()( implicit ec: ExecutionContext ): Future[ List[ Product ] ]
+
+  def findById( id: String )( implicit ec: ExecutionContext ): Future[ Option[Product] ]
+
+  def save( product: Product )( implicit ec: ExecutionContext ): Future[ WriteResult ]
 }
 
 class MongoProductDao( reactiveMongoApi: ReactiveMongoApi ) extends ProductDao {
@@ -25,6 +27,10 @@ class MongoProductDao( reactiveMongoApi: ReactiveMongoApi ) extends ProductDao {
     prodCollection.find( Json.obj() ).cursor[ Product ].collect[ List ]()
   }
 
+  def findById( id: String )( implicit ec: ExecutionContext ): Future[ Option[ Product ] ] = {
+    prodCollection.find( Json.obj( "_id" -> Json.obj( "$oid" -> id ) ) ).one[ Product ]
+  }
+  
   def save(product: Product)(implicit ec: ExecutionContext): Future[WriteResult] = {
     prodCollection.save(product)
   }

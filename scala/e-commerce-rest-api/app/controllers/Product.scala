@@ -58,8 +58,12 @@ class Product @Inject() ( val reactiveMongoApi: ReactiveMongoApi )
       .recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
   }
 
-  def getProductById( id: String ) = Action { implicit request =>
-    NotImplemented
+  def getProductById( id: String ) = Action.async { implicit request =>
+    log.info( s"getProductById($id)" )
+    postDao.findById( id ).map( x => x match {
+      case Some( x ) => Ok( Json.toJson( x ) )
+      case None      => NotFound
+    } ).recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
   }
 
   def create() = Action.async( BodyParsers.parse.json ) { implicit request =>
