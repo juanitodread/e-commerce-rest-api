@@ -18,7 +18,7 @@
  */
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json._
 
 /**
  * Product case class
@@ -29,7 +29,9 @@ import play.api.libs.json.Json
  * 
  * 	        Oct 25, 2015
  */
-case class Product( id: String, name: String, price: Double )
+case class Product( id: String, 
+                    name: String, 
+                    price: Double )
 
 /**
  * Singleton for Product case class
@@ -41,9 +43,38 @@ case class Product( id: String, name: String, price: Double )
  * 	        Oct 25, 2015
  */
 object Product {
-
+  
   implicit val productWrites = Json.writes[ Product ]
 
   implicit val productReads = Json.reads[ Product ]
+  
+  implicit object MongoProductWrites extends OWrites[ Product ] {
+
+    def writes( prod: Product ): JsObject = prod match {
+      case Product("", _, _) => Json.obj("name" -> prod.name,
+                                         "price" -> prod.price)
+      case _ => Json.obj("_id" -> prod.id,
+                         "name" -> prod.name,
+                         "price" -> prod.price)
+    }
+  }
+  
+  implicit object MongoProductReads extends Reads[Product] {
+
+    def reads( json: JsValue ): JsResult[ Product ] = json match {
+      case jsonObj: JsObject => try {
+        val id = ( jsonObj \ "_id" \ "$oid" ).as[String]
+        val name = ( jsonObj \ "name" ).as[ String ]
+        val price = ( jsonObj \ "price" ).as[ Double ]
+
+        JsSuccess( Product( id, name, price ) )
+      } catch {
+        
+        case cause: Throwable => JsError( cause.getMessage )
+      }
+
+      case _ => JsError( "expected.jsobject" )
+    }
+  }
 
 }

@@ -47,13 +47,15 @@ import reactivemongo.core.actors.Exceptions.PrimaryUnavailableException
 class Product @Inject() ( val reactiveMongoApi: ReactiveMongoApi ) 
   extends Controller with MongoController with ReactiveMongoComponents {
 
+  import models.Product.{ productWrites, productReads }
+  
   val log = Logger( this.getClass )
   def postDao = new MongoProductDao( reactiveMongoApi )
-  
+
   def getAll() = Action.async { implicit request =>
     log.info( "getAll()" )
-    postDao.find().map(products => Ok(Json.toJson(products.reverse)))
-    .recover {case PrimaryUnavailableException => InternalServerError("Please install MongoDB")}
+    postDao.find().map( products => Ok( Json.toJson( products ) ) )
+      .recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
   }
 
   def getProductById( id: String ) = Action { implicit request =>
@@ -62,12 +64,15 @@ class Product @Inject() ( val reactiveMongoApi: ReactiveMongoApi )
     Ok( Json.toJson( defaultProduct ) )
   }
   
-  def create() = Action(BodyParsers.parse.json) { implicit request =>
-    NotImplemented
-//    log.info(s"create(): Body: ${request.body}")
-//    val valid = request.body.validate[PBean]
+  def create() = Action.async(BodyParsers.parse.json) { implicit request =>
+    log.info(s"create(): Body: ${request.body}")
+    val pr = request.body.validate[PBean]
 //    log.info(s"JSON valid: $valid")
-//    if(valid.isError) BadRequest(valid.toString) else Ok
+    log.info(s"pr.get:::::::::::::::::::::${pr.get}")
+    log.info("Starting store product")
+    postDao.save(pr.get).map( x => NoContent )
+//    if(valid.isError) BadRequest(valid.toString) else
+    .recover { case PrimaryUnavailableException => InternalServerError( "Please install MongoDB" ) }
   }
 
   def update(id: String) = Action {
